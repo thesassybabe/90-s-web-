@@ -1,0 +1,137 @@
+<html><head><base href="https://98.js.org/%20add%20this%20and%20make%20this%20cover%20th%20whole%20screen"><title>98.js.org - Full Screen</title>
+<style>
+  html, body, iframe {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+  }
+
+  iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #theme-selector {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    background: #c0c0c0;
+    border: 2px solid #808080;
+    padding: 5px;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+  }
+
+  .theme-button {
+    margin: 2px;
+    padding: 4px 8px;
+    background: #c0c0c0;
+    border: 2px outset #fff;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .theme-button:active {
+    border-style: inset;
+  }
+</style>
+</head>
+<body>
+<div id="theme-selector">
+  <button class="theme-button" onclick="changeTheme('98')">Windows 98</button>
+  <button class="theme-button" onclick="changeTheme('95')">Windows 95</button>
+  <button class="theme-button" onclick="changeTheme('7')">Windows 7 Basic</button>
+  <button class="theme-button" onclick="changeTheme('xp')">Windows XP</button>
+  <button class="theme-button" onclick="changeTheme('mac')">Mac OS</button>
+</div>
+
+<iframe id="mainFrame" src="https://98.js.org/" allowfullscreen="true" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+<script>
+// Ensure iframe maintains full screen dimensions
+window.addEventListener('resize', function() {
+  const iframe = document.querySelector('iframe');
+  iframe.style.height = window.innerHeight + 'px';
+  iframe.style.width = window.innerWidth + 'px';
+});
+
+// Initial size set
+window.dispatchEvent(new Event('resize'));
+
+// Theme changing functionality
+function changeTheme(theme) {
+  const iframe = document.getElementById('mainFrame');
+  switch(theme) {
+    case '98':
+      iframe.src = 'https://98.js.org/';
+      break;
+    case '95':
+      iframe.src = 'https://winxp.vercel.app/';  // Note: This is a similar project, not actual Win95
+      break;
+    case '7':
+      iframe.src = 'https://win7simu.visnalize.com/';  // Similar project
+      break;
+    case 'xp':
+      iframe.src = 'https://winxp.vercel.app/';
+      break;
+    case 'mac':
+      iframe.src = 'https://macos.vercel.app/';  // Similar project
+      break;
+  }
+}
+
+// Make the theme selector draggable
+const themeSelector = document.getElementById('theme-selector');
+let isDragging = false;
+let currentX;
+let currentY;
+let initialX;
+let initialY;
+let xOffset = 0;
+let yOffset = 0;
+
+themeSelector.addEventListener('mousedown', dragStart);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', dragEnd);
+
+function dragStart(e) {
+  initialX = e.clientX - xOffset;
+  initialY = e.clientY - yOffset;
+
+  if (e.target === themeSelector) {
+    isDragging = true;
+  }
+}
+
+function drag(e) {
+  if (isDragging) {
+    e.preventDefault();
+    currentX = e.clientX - initialX;
+    currentY = e.clientY - initialY;
+
+    xOffset = currentX;
+    yOffset = currentY;
+
+    setTranslate(currentX, currentY, themeSelector);
+  }
+}
+
+function setTranslate(xPos, yPos, el) {
+  el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+}
+
+function dragEnd(e) {
+  initialX = currentX;
+  initialY = currentY;
+  isDragging = false;
+}
+</script>
+
+</body>
+</html>
